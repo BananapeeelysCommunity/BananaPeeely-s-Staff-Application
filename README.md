@@ -16,12 +16,12 @@ font-family:Poppins,sans-serif;
 }
 
 body{
-background:#1a1a1a; /* DARK MODE */
+background:#111; /* DARK MODE */
 color:white;
 overflow-x:hidden;
+overflow-y:hidden; /* DISABLE SCROLL DURING LOADING */
 }
 
-/* Banana gold accents */
 .glass{
 width:700px;
 max-width:92%;
@@ -55,6 +55,7 @@ font-size:18px;
 font-weight:600;
 cursor:pointer;
 transition:.3s;
+color:black;
 }
 
 button:hover{
@@ -69,19 +70,14 @@ margin-top:15px;
 border:none;
 border-radius:12px;
 font-size:16px;
-background:rgba(255,255,255,.12);
-color:white;
+background:white; /* WHITE BACKGROUND */
+color:black; /* BLACK TEXT */
 outline:none;
 }
 
 textarea{
 resize:none;
 height:120px;
-}
-
-::placeholder{
-color:white;
-opacity:.8;
 }
 
 .hidden{
@@ -98,28 +94,6 @@ color:#ffd400;
 50%{transform:translateY(-15px);}
 }
 
-.progress{
-width:100%;
-height:18px;
-background:rgba(255,255,255,.2);
-border-radius:50px;
-margin-top:30px;
-overflow:hidden;
-}
-
-.bar{
-height:100%;
-width:0%;
-background:#ffd400;
-transition:.1s;
-}
-
-#percent{
-margin-top:10px;
-font-size:22px;
-color:#ffd400;
-}
-
 .success{
 font-size:30px;
 font-weight:600;
@@ -132,21 +106,16 @@ color:#00ff7f;
 <body>
 
 <!-- LOADING SCREEN -->
-<div class="page-center" id="loading" style="display:flex;justify-content:center;align-items:center;min-height:100vh;">
+<div id="loading" style="display:flex;justify-content:center;align-items:center;min-height:100vh;">
 <div class="glass">
 <div id="banana">🍌</div>
 <h1>Bananapeeely's Community</h1>
-
-<div class="progress">
-<div class="bar" id="bar"></div>
-</div>
-
-<div id="percent">0%</div>
+<p>Loading...</p>
 </div>
 </div>
 
 <!-- APPLICATION FORM -->
-<div class="page-center hidden" id="formPage" style="display:flex;justify-content:center;align-items:center;min-height:100vh;">
+<div id="formPage" class="hidden" style="padding:40px 0;">
 <div class="glass">
 <h1>Staff Application</h1>
 <p>Please answer honestly.</p>
@@ -159,7 +128,6 @@ color:#00ff7f;
 <textarea id="experienceLevel" placeholder="What's your level of experience with moderation?"></textarea>
 <textarea id="bringStaff" placeholder="What would you add/bring to the staff team?"></textarea>
 
-<!-- SPAM SELECT -->
 <select id="spamAction">
 <option value="">If someone is spamming a lot, what would you do?</option>
 <option value="Mute">Mute</option>
@@ -168,7 +136,6 @@ color:#00ff7f;
 <option value="Ban">Ban</option>
 </select>
 
-<!-- RACIAL SLURS SELECT -->
 <select id="slurAction">
 <option value="">If someone is cussing and saying racial slurs, what would you do?</option>
 <option value="Mute">Mute</option>
@@ -204,23 +171,13 @@ color:#00ff7f;
 </div>
 
 <script>
-// Loading animation
-let bar = document.getElementById("bar");
-let percent = document.getElementById("percent");
-let load = 0;
-
-let loadingInterval = setInterval(() => {
-load++;
-bar.style.width = load + "%";
-percent.innerText = load + "%";
-
-if(load >= 100){
-clearInterval(loadingInterval);
+// FIXED: 4-second loading screen
+setTimeout(() => {
 document.getElementById("loading").classList.add("hidden");
 document.getElementById("formPage").classList.remove("hidden");
+document.body.style.overflowY = "auto"; // ENABLE SCROLL AFTER LOADING
 window.scrollTo(0,0);
-}
-}, 30);
+}, 4000);
 
 // Webhook submission
 function submitForm(){
