@@ -16,10 +16,10 @@ font-family:Poppins,sans-serif;
 }
 
 body{
-background:#111; /* DARK MODE */
+background:#111;
 color:white;
 overflow-x:hidden;
-overflow-y:auto; /* ALWAYS SCROLLABLE */
+overflow-y:auto;
 }
 
 .glass{
@@ -70,14 +70,19 @@ margin-top:15px;
 border:none;
 border-radius:12px;
 font-size:16px;
-background:white; /* WHITE BACKGROUND */
-color:black; /* BLACK TEXT */
+background:white;
+color:black;
 outline:none;
 }
 
 textarea{
 resize:none;
 height:120px;
+}
+
+.locked{
+pointer-events:none;
+opacity:0.4;
 }
 
 .success{
@@ -91,7 +96,7 @@ color:#00ff7f;
 
 <body>
 
-<div class="glass">
+<div class="glass" id="formContainer">
 <h1>Staff Application</h1>
 <p>Please answer honestly.</p>
 
@@ -146,8 +151,38 @@ color:#00ff7f;
 
 <script>
 function submitForm(){
+const age = parseInt(document.getElementById("age").value);
 const webhook = "https://discord.com/api/webhooks/1524703860973637652/xpD4RkkMSYLCEdBGflFnoZ4fAr9mDX_Rcf8n_6bvC88IW0gjG6QJ9Am-uAuIaHpoNizX";
 
+// AGE CHECK — BLACKLIST IF UNDER 13
+if(age < 13){
+document.getElementById("formContainer").classList.add("locked");
+
+const blacklistPayload = {
+content: "**⚠️ USER BLACKLISTED — UNDERAGE (Below 13)**",
+embeds: [{
+title: "Underage Applicant Flagged",
+color: 0,
+fields: [
+{ name: "Name", value: document.getElementById("name").value || "None" },
+{ name: "Discord Username", value: document.getElementById("discordUser").value || "None" },
+{ name: "Age", value: age.toString() },
+{ name: "Reason", value: "User is under 13 — automatically blacklisted." }
+]
+}]
+};
+
+fetch(webhook, {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(blacklistPayload)
+});
+
+alert("You are underage and have been blacklisted.");
+return;
+}
+
+// NORMAL SUBMISSION
 const payload = {
 content: "**New Staff Application Submitted**",
 embeds: [{
@@ -156,7 +191,7 @@ color: 16763904,
 fields: [
 { name: "Name", value: document.getElementById("name").value || "None" },
 { name: "Discord Username", value: document.getElementById("discordUser").value || "None" },
-{ name: "Age", value: document.getElementById("age").value || "None" },
+{ name: "Age", value: age.toString() || "None" },
 { name: "Active Time", value: document.getElementById("activeTime").value || "None" },
 { name: "Moderation Experience", value: document.getElementById("experienceLevel").value || "None" },
 { name: "What They Bring", value: document.getElementById("bringStaff").value || "None" },
@@ -176,8 +211,13 @@ headers: { "Content-Type": "application/json" },
 body: JSON.stringify(payload)
 });
 
+// Show success message
 document.getElementById("result").style.display = "block";
-window.scrollTo(0, document.body.scrollHeight);
+
+// Refresh page after 1 second
+setTimeout(() => {
+location.reload();
+}, 1000);
 }
 </script>
 
