@@ -19,7 +19,7 @@ body{
 background:#111; /* DARK MODE */
 color:white;
 overflow-x:hidden;
-overflow-y:hidden; /* DISABLE SCROLL DURING LOADING */
+overflow-y:auto; /* ALWAYS SCROLLABLE */
 }
 
 .glass{
@@ -31,7 +31,7 @@ border-radius:25px;
 padding:40px;
 box-shadow:0 15px 40px rgba(0,0,0,.45);
 text-align:center;
-margin:auto;
+margin:40px auto;
 border:1px solid rgba(255,215,0,.25);
 }
 
@@ -80,20 +80,6 @@ resize:none;
 height:120px;
 }
 
-.hidden{
-display:none;
-}
-
-#banana{
-font-size:120px;
-animation:bounce 1s infinite;
-color:#ffd400;
-}
-
-@keyframes bounce{
-50%{transform:translateY(-15px);}
-}
-
 .success{
 font-size:30px;
 font-weight:600;
@@ -105,17 +91,6 @@ color:#00ff7f;
 
 <body>
 
-<!-- LOADING SCREEN -->
-<div id="loading" style="display:flex;justify-content:center;align-items:center;min-height:100vh;">
-<div class="glass">
-<div id="banana">🍌</div>
-<h1>Bananapeeely's Community</h1>
-<p>Loading...</p>
-</div>
-</div>
-
-<!-- APPLICATION FORM -->
-<div id="formPage" class="hidden" style="padding:40px 0;">
 <div class="glass">
 <h1>Staff Application</h1>
 <p>Please answer honestly.</p>
@@ -166,20 +141,10 @@ color:#00ff7f;
 
 <button onclick="submitForm()">Submit Application</button>
 
-<div id="result" class="success hidden">Application Submitted!</div>
-</div>
+<div id="result" class="success" style="display:none;">Application Submitted!</div>
 </div>
 
 <script>
-// FIXED: 4-second loading screen
-setTimeout(() => {
-document.getElementById("loading").classList.add("hidden");
-document.getElementById("formPage").classList.remove("hidden");
-document.body.style.overflowY = "auto"; // ENABLE SCROLL AFTER LOADING
-window.scrollTo(0,0);
-}, 4000);
-
-// Webhook submission
 function submitForm(){
 const webhook = "https://discord.com/api/webhooks/1524703860973637652/xpD4RkkMSYLCEdBGflFnoZ4fAr9mDX_Rcf8n_6bvC88IW0gjG6QJ9Am-uAuIaHpoNizX";
 
@@ -211,7 +176,7 @@ headers: { "Content-Type": "application/json" },
 body: JSON.stringify(payload)
 });
 
-document.getElementById("result").classList.remove("hidden");
+document.getElementById("result").style.display = "block";
 window.scrollTo(0, document.body.scrollHeight);
 }
 </script>
