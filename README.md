@@ -1,9 +1,3 @@
-
-
-
-
-
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -22,42 +16,29 @@ font-family:Poppins,sans-serif;
 }
 
 body{
-background:linear-gradient(-45deg,#ffcb05,#ffd94d,#ffea87,#ffe38b);
-background-size:400% 400%;
-animation:bg 12s ease infinite;
+background:#1a1a1a; /* DARK MODE */
 color:white;
 overflow-x:hidden;
 }
 
-@keyframes bg{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
-.page-center{
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-padding:40px 0;
-}
-
+/* Banana gold accents */
 .glass{
 width:700px;
 max-width:92%;
-background:rgba(255,255,255,.15);
+background:rgba(255,215,0,.12);
 backdrop-filter:blur(18px);
 border-radius:25px;
 padding:40px;
-box-shadow:0 15px 40px rgba(0,0,0,.25);
+box-shadow:0 15px 40px rgba(0,0,0,.45);
 text-align:center;
 margin:auto;
+border:1px solid rgba(255,215,0,.25);
 }
 
 h1{
 font-size:34px;
 margin-bottom:15px;
+color:#ffd400;
 }
 
 p{
@@ -78,17 +59,17 @@ transition:.3s;
 
 button:hover{
 transform:scale(1.05);
-background:#fff176;
+background:#ffea4d;
 }
 
-input,textarea{
+input,textarea,select{
 width:100%;
 padding:15px;
 margin-top:15px;
 border:none;
 border-radius:12px;
 font-size:16px;
-background:rgba(255,255,255,.2);
+background:rgba(255,255,255,.12);
 color:white;
 outline:none;
 }
@@ -110,6 +91,7 @@ display:none;
 #banana{
 font-size:120px;
 animation:bounce 1s infinite;
+color:#ffd400;
 }
 
 @keyframes bounce{
@@ -128,19 +110,21 @@ overflow:hidden;
 .bar{
 height:100%;
 width:0%;
-background:white;
+background:#ffd400;
 transition:.1s;
 }
 
 #percent{
 margin-top:10px;
 font-size:22px;
+color:#ffd400;
 }
 
 .success{
 font-size:30px;
 font-weight:600;
 margin-top:20px;
+color:#00ff7f;
 }
 </style>
 </head>
@@ -148,7 +132,7 @@ margin-top:20px;
 <body>
 
 <!-- LOADING SCREEN -->
-<div class="page-center" id="loading">
+<div class="page-center" id="loading" style="display:flex;justify-content:center;align-items:center;min-height:100vh;">
 <div class="glass">
 <div id="banana">🍌</div>
 <h1>Bananapeeely's Community</h1>
@@ -162,19 +146,56 @@ margin-top:20px;
 </div>
 
 <!-- APPLICATION FORM -->
-<div class="page-center hidden" id="formPage">
+<div class="page-center hidden" id="formPage" style="display:flex;justify-content:center;align-items:center;min-height:100vh;">
 <div class="glass">
 <h1>Staff Application</h1>
 <p>Please answer honestly.</p>
 
-<input id="discordUser" placeholder="Discord Username:">
-<input id="discordID" placeholder="Discord ID:">
-<input id="robloxUser" placeholder="Roblox Username:">
-<input id="robloxID" placeholder="Roblox ID:">
+<input id="name" placeholder="Name:">
+<input id="discordUser" placeholder="Your Discord Username:">
+<input id="age" placeholder="Age:">
+<input id="activeTime" placeholder="During which time of the day are you usually active?">
 
-<textarea id="whyStaff" placeholder="Why do you wish to be staff?"></textarea>
-<textarea id="positiveImpact" placeholder="How will you positively affect the community?"></textarea>
-<textarea id="experience" placeholder="Do you have any past experience?"></textarea>
+<textarea id="experienceLevel" placeholder="What's your level of experience with moderation?"></textarea>
+<textarea id="bringStaff" placeholder="What would you add/bring to the staff team?"></textarea>
+
+<!-- SPAM SELECT -->
+<select id="spamAction">
+<option value="">If someone is spamming a lot, what would you do?</option>
+<option value="Mute">Mute</option>
+<option value="Warn and Mute">Warn and Mute</option>
+<option value="Kick">Kick</option>
+<option value="Ban">Ban</option>
+</select>
+
+<!-- RACIAL SLURS SELECT -->
+<select id="slurAction">
+<option value="">If someone is cussing and saying racial slurs, what would you do?</option>
+<option value="Mute">Mute</option>
+<option value="Warn and Mute">Warn and Mute</option>
+<option value="Kick">Kick</option>
+<option value="Ban">Ban</option>
+</select>
+
+<select id="grammar">
+<option value="">Do you know that you must use grammar?</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select>
+
+<select id="abuse">
+<option value="">Do you know that abusing powers will get you demoted?</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select>
+
+<select id="disrespect">
+<option value="">Do you know that disrespecting staff will get you demoted?</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select>
+
+<textarea id="extra" placeholder="Anything else you'd like to add? (Optional)"></textarea>
 
 <button onclick="submitForm()">Submit Application</button>
 
@@ -211,13 +232,18 @@ embeds: [{
 title: "Bananapeeely Staff Application",
 color: 16763904,
 fields: [
-{ name: "Discord User", value: document.getElementById("discordUser").value || "None" },
-{ name: "Discord ID", value: document.getElementById("discordID").value || "None" },
-{ name: "Roblox User", value: document.getElementById("robloxUser").value || "None" },
-{ name: "Roblox ID", value: document.getElementById("robloxID").value || "None" },
-{ name: "Why Staff?", value: document.getElementById("whyStaff").value || "None" },
-{ name: "Positive Impact", value: document.getElementById("positiveImpact").value || "None" },
-{ name: "Experience", value: document.getElementById("experience").value || "None" }
+{ name: "Name", value: document.getElementById("name").value || "None" },
+{ name: "Discord Username", value: document.getElementById("discordUser").value || "None" },
+{ name: "Age", value: document.getElementById("age").value || "None" },
+{ name: "Active Time", value: document.getElementById("activeTime").value || "None" },
+{ name: "Moderation Experience", value: document.getElementById("experienceLevel").value || "None" },
+{ name: "What They Bring", value: document.getElementById("bringStaff").value || "None" },
+{ name: "Spam Action", value: document.getElementById("spamAction").value || "None" },
+{ name: "Racial Slur Action", value: document.getElementById("slurAction").value || "None" },
+{ name: "Grammar", value: document.getElementById("grammar").value || "None" },
+{ name: "Abuse of Powers", value: document.getElementById("abuse").value || "None" },
+{ name: "Disrespecting Staff", value: document.getElementById("disrespect").value || "None" },
+{ name: "Extra Info", value: document.getElementById("extra").value || "None" }
 ]
 }]
 };
